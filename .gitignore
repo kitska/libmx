@@ -1,0 +1,5 @@
+.vscode
+a.exe
+obj
+main.c
+libmx.a
