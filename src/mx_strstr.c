@@ -2,24 +2,20 @@
 
 
 char *mx_strstr(const char *haystack, const char *needle) {
-	if (haystack == NULL || needle == NULL) {
+	if (haystack == NULL || needle == NULL)
         return NULL;
-    }
 
-    while (*haystack != '\0') {
-        const char *haystackPtr = haystack;
-        const char *needlePtr = needle;
+    int haystack_len = mx_strlen(haystack);
+    int needle_len = mx_strlen(needle);
 
-        while (*needlePtr != '\0' && *haystackPtr == *needlePtr) {
-            haystackPtr++;
-            needlePtr++;
+    for (int i = 0; i <= haystack_len - needle_len; i++) {
+        int j;
+        for (j = 0; j < needle_len; j++) {
+            if (haystack[i + j] != needle[j])
+                break;
         }
-
-        if (*needlePtr == '\0') {
-            return (char *)haystack;
-        }
-
-        haystack++;
+        if (j == needle_len)
+            return (char *)(haystack + i);
     }
 
     return NULL;

@@ -1,6 +1,10 @@
 #include "../inc/libmx.h"
 
 char* mx_itoa(int number) {
+    if (number == -2147483648) {
+        return "-2147483648";
+    }
+    
     int maxDigits = 1;
     int temp = number;
     while (temp / 10 != 0) {
@@ -8,7 +12,7 @@ char* mx_itoa(int number) {
         temp /= 10;
     }
 
-    char* result = (char*)malloc((maxDigits + 1) * 1);
+    char* result = (char*)malloc((maxDigits + 1) * sizeof(char));
     if (result == NULL) {
         return NULL;
     }

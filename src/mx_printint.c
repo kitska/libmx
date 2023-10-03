@@ -8,7 +8,7 @@ void mx_printint(int n) {
 
     if (n == 0) {
         mx_printchar('0');
-        return; // Exit the function
+        return;
     }
 
     if (n < 0) {

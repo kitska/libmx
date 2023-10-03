@@ -6,31 +6,36 @@ char *mx_file_to_str(const char *file) {
         return NULL;
     }
 
-    off_t file_size = lseek(fd, 0, SEEK_END);
-    if (file_size == -1) {
-        close(fd);
-        return NULL;
+    char *str = NULL;
+    size_t file_size = 0;
+    size_t buffer_size = 1024;
+
+    while (1) {
+        if (file_size + buffer_size > file_size) {
+            buffer_size *= 2;
+            str = mx_realloc(str, buffer_size);
+            if (str == NULL) {
+                close(fd);
+                return NULL;
+            }
+        }
+
+        ssize_t bytes_read = read(fd, str + file_size, buffer_size - file_size);
+        if (bytes_read == -1) {
+            mx_strdel(&str);
+            close(fd);
+            return NULL;
+        }
+
+        if (bytes_read == 0) {
+            str[file_size] = '\0';
+            break;
+        }
+
+        file_size += bytes_read;
     }
 
-    if (lseek(fd, 0, SEEK_SET) == -1) {
-        close(fd);
-        return NULL;
-    }
-
-    char *str = mx_strnew(file_size);
-    if (str == NULL) {
-        close(fd);
-        return NULL; 
-    }
-
-
-    ssize_t bytes_read = read(fd, str, file_size);
     close(fd);
-
-    if (bytes_read == -1 || (size_t)bytes_read != (size_t)file_size) {
-        mx_strdel(&str);
-        return NULL;
-    }
 
     return str;
 }
